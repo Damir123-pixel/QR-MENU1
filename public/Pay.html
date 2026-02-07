@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Оплата картой</title>
+  <!-- Запрет кэша, чтобы «Назад» не показывал старую страницу -->
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+
+<script src="session-check.js"></script>
+<noscript>
+  <!-- На всякий — без JS сайт недоступен -->
+  <meta http-equiv="refresh" content="0;url=/index.html">
+</noscript>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1e1e1e, #2e1a14);
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #f2c94c;
+      text-align: center;
+      padding: 25px;
+      margin: 0;
+    }
+
+    .payment-box {
+      background: rgba(44, 44, 44, 0.9);
+      padding: 25px;
+      border-radius: 20px;
+      max-width: 420px;
+      margin: auto;
+      margin-top: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    .input-field {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .input-field input {
+      padding: 15px;
+      width: 100%;
+      border-radius: 12px;
+      border: 2px solid transparent;
+      font-size: 1.1rem;
+      box-sizing: border-box;
+      outline: none;
+      background: #1e1e1e;
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .input-field input:focus {
+      border-color: #f2c94c;
+      box-shadow: 0 0 10px #f2c94c55;
+    }
+
+    .input-field label {
+      position: absolute;
+      top: 50%;
+      left: 15px;
+      transform: translateY(-50%);
+      color: #aaa;
+      pointer-events: none;
+      transition: 0.3s;
+    }
+
+    .input-field input:focus + label,
+    .input-field input:not(:placeholder-shown) + label {
+      top: -8px;
+      font-size: 0.85rem;
+      color: #f2c94c;
+      background: #2c2c2c;
+      padding: 0 5px;
+      border-radius: 5px;
+    }
+
+    button {
+      background: linear-gradient(90deg, #f2c94c, #f5d87a);
+      border: none;
+      padding: 16px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 12px;
+      width: 100%;
+      margin-top: 10px;
+      color: #1e1e1e;
+      box-shadow: 0 4px 15px rgba(242,201,76,0.4);
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 18px rgba(242,201,76,0.6);
+    }
+
+    @media (max-width: 480px) {
+      .payment-box {
+        margin-top: 10px;
+        border-radius: 0;
+        max-width: 100%;
+        height: calc(100vh - 50px);
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Оплата картой</h1>
+  <div class="payment-box">
+    <div class="input-field">
+      <input type="text" id="cardNumber" placeholder=" " maxlength="19" inputmode="numeric">
+      <label for="cardNumber">Номер карты</label>
+    </div>
+
+    <div class="input-field">
+      <input type="text" id="expiry" placeholder=" " maxlength="5" inputmode="numeric">
+      <label for="expiry">MM/YY</label>
+    </div>
+
+    <div class="input-field">
+      <input type="text" id="cvv" placeholder=" " maxlength="3" inputmode="numeric">
+      <label for="cvv">CVV</label>
+    </div>
+
+    <button id="payBtn">Оплатить</button>
+
+    <a class="back-link" href="cart.html">Назад к меню</a>
+
+
+  </div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, push, set, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+// Генерация clientId
+if (!localStorage.getItem("clientId")) {
+  localStorage.setItem("clientId", crypto.randomUUID());
+}
+const clientId = localStorage.getItem("clientId");
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyCClVQXq8Y5lk2mDHznmvojt9JnLUp6yeQ",
+  authDomain: "qr-menu-c4ae0.firebaseapp.com",
+  projectId: "qr-menu-c4ae0",
+  storageBucket: "qr-menu-c4ae0.appspot.com",
+  messagingSenderId: "474351769143",
+  appId: "1:474351769143:web:a9e192499f96dc0e4011b2",
+  databaseURL: "https://qr-menu-c4ae0-default-rtdb.firebaseio.com"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+document.getElementById("cardNumber").addEventListener("input", function(e) {
+  let value = e.target.value.replace(/\D/g, "").substring(0,16);
+  e.target.value = value.replace(/(\d{4})(?=\d)/g, "$1 ");
+});
+
+document.getElementById("expiry").addEventListener("input", function(e) {
+  let value = e.target.value.replace(/\D/g, "").substring(0,4);
+  if (value.length > 2) {
+    e.target.value = value.substring(0,2) + "/" + value.substring(2);
+  } else {
+    e.target.value = value;
+  }
+});
+
+document.getElementById("payBtn").addEventListener("click", async () => {
+  const pendingOrder = JSON.parse(localStorage.getItem("pendingOrder"));
+  if (!pendingOrder) {
+    alert("❌ Ошибка: заказ не найден.");
+    return;
+  }
+
+  try {
+    // Проверяем, что место ещё свободно
+    const seatSnapshot = await get(ref(db, `occupiedSeats/${pendingOrder.seatNumber}`));
+    if (seatSnapshot.exists()) {
+      const seatData = seatSnapshot.val();
+      const reservedAt = seatData.reservedAt || 0;
+      const FOUR_HOURS = 4 * 60 * 60 * 1000;
+      const now = Date.now();
+      const isStillOccupied = seatData.occupied && (now - reservedAt < FOUR_HOURS);
+
+      if (isStillOccupied && seatData.clientId !== clientId) {
+        alert("❌ Это место уже занято другим клиентом. Пожалуйста, выберите другое.");
+        return;
+      }
+    }
+
+    // Отправляем заказ в Firebase
+    const orderRef = push(ref(db, "orders"));
+    await set(orderRef, pendingOrder);
+
+    // Сохраняем бронирование места
+    await set(ref(db, `occupiedSeats/${pendingOrder.seatNumber}`), {
+      occupied: true,
+      reservedAt: Date.now(),
+      clientId: clientId
+    });
+
+    localStorage.setItem("myReservedSeat", pendingOrder.seatNumber);
+    localStorage.setItem("myReservationTime", Date.now());
+
+    alert("✅ Оплата прошла успешно!");
+    localStorage.removeItem("pendingOrder");
+    localStorage.removeItem("cart");
+    localStorage.removeItem("selectedPromos");
+
+    window.location.href = "index.html";
+  } catch (error) {
+    alert("❌ Ошибка отправки заказа: " + error.message);
+  }
+});
+</script>
+<style>
+  
+  .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 40px;
+      text-decoration: none;
+      color: #f2c94c;
+      font-weight: bold;
+    }
+  </style>
+
+
+
+
+
+</body>
+</html>

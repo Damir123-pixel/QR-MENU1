@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Корзина</title>
+  <!-- Запрет кэша, чтобы «Назад» не показывал старую страницу -->
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+
+<script src="session-check.js"></script>
+<noscript>
+  <!-- На всякий — без JS сайт недоступен -->
+  <meta http-equiv="refresh" content="0;url=/index.html">
+</noscript>
+
+  <link rel="shortcut icon" type="image/png" href="icon.png.png">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <style>
+    body {
+      background: linear-gradient(to right, #1e1e1e, #2e1a14);
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      padding: 40px;
+    }
+    h1 {
+      text-align: center;
+      color: #f2c94c;
+      font-size: 2.8rem;
+      margin-bottom: 30px;
+    }
+    .cart-container {
+      max-width: 650px;
+      margin: 0 auto;
+      background: #2c2c2c;
+      border-radius: 20px;
+      padding: 30px 25px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+    }
+    .cart-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .cart-header i {
+      font-size: 2rem;
+      color: #f2c94c;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #444;
+    }
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+    .total {
+      text-align: right;
+      font-size: 1.3rem;
+      margin-top: 25px;
+      color: #f2c94c;
+    }
+    .empty {
+      text-align: center;
+      font-size: 1.2rem;
+      margin-top: 30px;
+      color: #aaa;
+    }
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 25px;
+    }
+    .btn {
+      background-color: #f2c94c;
+      color: #1e1e1e;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #fff3a6;
+    }
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 40px;
+      text-decoration: none;
+      color: #f2c94c;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Корзина</h1>
+  <div class="cart-container">
+    <div class="cart-header">
+      <i class='bx bx-cart'></i>
+      <span>Ваши выбранные блюда</span>
+    </div>
+
+    <div id="cart-items"></div>
+    <ul id="promoList"></ul><br><br>
+    <div id="total-price" class="total"></div>
+
+    <div class="actions">
+      <button class="btn" onclick="clearCart()">Очистить</button>
+      <div style="margin-top: 20px;">
+  <div class="table-select-wrapper">
+  <label for="table-number">Выберите столик:</label>
+  <select id="table-number" required>
+    <option value="">-- Номер столика --</option>
+    <option value="1">Столик №1</option>
+    <option value="2">Столик №2</option>
+    <option value="3">Столик №3</option>
+    <option value="4">Столик №4</option>
+    <option value="5">Столик №5</option>
+    <option value="6">Столик №6</option>
+    <option value="7">Столик №7</option>
+    <option value="8">Столик №8</option>
+    <option value="9">Столик №9</option>
+    <option value="10">Столик №10</option>
+    <option value="11">Столик №11</option>
+    <option value="12">Столик №12</option>
+    <option value="13">Столик №13</option>
+    <option value="14">Столик №14</option>
+    <option value="15">Столик №15</option>
+    <option value="16">Столик №16</option>
+    <option value="17">Столик №17</option>
+    <option value="18">Столик №18</option>
+    <option value="19">Столик №19</option>
+    <option value="20">Столик №20</option>
+  </select>
+
+  <h2>Выберите место</h2>
+<div class="table-map" id="tableMap">
+  <div class="table" data-number="1">1</div>
+  <div class="table" data-number="2">2</div>
+  <div class="table" data-number="3">3</div>
+  <div class="table" data-number="4">4</div>
+  <div class="table" data-number="5">5</div>
+  <div class="table" data-number="5">6</div>
+</div>
+<p id="selectedTableInfo">Место не выбран</p>
+<button class="cancel-btn" id="cancelTable">Отменить выбор</button>
+</div>
+
+<style>
+  .table-select-wrapper {
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+
+  .table-select-wrapper label {
+    display: block;
+    margin-bottom: 8px;
+    color: #f2c94c;
+    font-weight: bold;
+    font-size: 15px;
+  }
+
+  #table-number {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #f2c94c;
+    border-radius: 10px;
+    font-size: 16px;
+    background-color: #fff;
+    color: #1e1e1e;
+    font-weight: bold;
+  }
+</style>
+
+</div>
+
+      <button class="btn" id="submit-order">Оформить</button>
+    </div>
+  </div>
+
+  <div class="payment-method">
+  <h3>Способ оплаты</h3>
+  
+  <label class="payment-option">
+    <input type="radio" name="payment" value="cash">
+    <span>💵 Оплата наличными</span>
+  </label>
+
+  <label class="payment-option">
+    <input type="radio" name="payment" value="card">
+    <span>💳 Оплата картой</span>
+  </label>
+</div>
+
+  
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, push, set, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+  // Уникальный ID клиента
+  if (!localStorage.getItem("clientId")) {
+    const clientId = crypto.randomUUID();
+    localStorage.setItem("clientId", clientId);
+  }
+  const clientId = localStorage.getItem("clientId");
+
+  // Firebase конфиг
+  const firebaseConfig = {
+    apiKey: "AIzaSyCClVQXq8Y5lk2mDHznmvojt9JnLUp6yeQ",
+    authDomain: "qr-menu-c4ae0.firebaseapp.com",
+    projectId: "qr-menu-c4ae0",
+    storageBucket: "qr-menu-c4ae0.appspot.com",
+    messagingSenderId: "474351769143",
+    appId: "1:474351769143:web:a9e192499f96dc0e4011b2",
+    databaseURL: "https://qr-menu-c4ae0-default-rtdb.firebaseio.com"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  document.getElementById("submit-order").addEventListener("click", async () => {
+  const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+  const selectedPromos = JSON.parse(localStorage.getItem("selectedPromos")) || [];
+  const tableSelect = document.getElementById("table-number");
+  const tableNumber = parseInt(tableSelect.value);
+  const seatNumber = window.selectedTable ? parseInt(window.selectedTable) : null;
+  const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value; // 💰 выбор
+
+  if (!paymentMethod) {
+    alert("❗ Пожалуйста, выберите способ оплаты.");
+    return;
+  }
+
+  if (cartItems.length === 0) {
+    alert("Корзина пуста!");
+    return;
+  }
+
+  if (isNaN(tableNumber) || tableNumber < 1 || tableNumber > 20) {
+    alert("❗ Пожалуйста, выберите номер столика от 1 до 20 перед оформлением заказа.");
+    return;
+  }
+
+  if (isNaN(seatNumber) || seatNumber < 1 || seatNumber > 20) {
+    alert("❗ Пожалуйста, выберите место (сидение) перед оформлением заказа.");
+    return;
+  }
+
+  const order = {
+    tableNumber,
+    seatNumber,
+    items: cartItems,
+    promos: selectedPromos,
+    payment: paymentMethod, // 👈 в админке будет видно "cash" или "card"
+    createdAt: Date.now()
+  };
+
+  try {
+  // 1. Проверка: место занято или нет
+  const seatSnapshot = await get(ref(db, `occupiedSeats/${seatNumber}`));
+  if (seatSnapshot.exists()) {
+    const seatData = seatSnapshot.val();
+    const reservedAt = seatData.reservedAt || 0;
+    const FOUR_HOURS = 4 * 60 * 60 * 1000;
+    const now = Date.now();
+    const isStillOccupied = seatData.occupied && (now - reservedAt < FOUR_HOURS);
+
+    if (isStillOccupied && seatData.clientId !== clientId) {
+      alert("❌ Это место уже занято другим клиентом. Пожалуйста, выберите другое.");
+      return;
+    }
+  }
+
+  // 2. Если карта — сохраняем только в pendingOrder
+  if (paymentMethod === "card") {
+    localStorage.setItem("pendingOrder", JSON.stringify(order));
+    window.location.href = "Pay.html";
+    return;
+  }
+
+  // 3. Если наличные — сохраняем сразу в Firebase
+  const orderRef = push(ref(db, "orders"));
+  await set(orderRef, order);
+
+  await set(ref(db, `occupiedSeats/${seatNumber}`), {
+    occupied: true,
+    reservedAt: Date.now(),
+    clientId: clientId
+  });
+
+  localStorage.setItem("myReservedSeat", seatNumber);
+  localStorage.setItem("myReservationTime", Date.now());
+
+  alert("✅ Заказ отправлен! Оплата наличными.");
+  localStorage.removeItem("cart");
+  localStorage.removeItem("selectedPromos");
+  window.location.reload();
+
+} catch (error) {
+  alert("❌ Ошибка отправки заказа: " + error.message);
+}
+
+
+});
+</script>
+
+
+  
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #1e1e1e;
+    color: #fff;
+    margin: 0;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  h2 {
+    color: #f2c94c;
+    margin-bottom: 30px;
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .table-map {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 20px;
+    max-width: 500px;
+    margin: 0 auto 20px auto;
+  }
+
+  .table {
+    background: linear-gradient(145deg, #2c2c2c, #1a1a1a);
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #f2c94c;
+    transition: all 0.3s ease;
+    position: relative;
+    border: 2px solid transparent;
+  }
+
+  .table:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 12px #f2c94c88;
+  }
+
+  .table.selected {
+    background: #f2c94c;
+    color: #1e1e1e;
+    border: 2px solid #ffffff99;
+    box-shadow: 0 0 18px #f2c94c;
+    transform: scale(1.07);
+  }
+
+  #selectedTableInfo {
+    font-size: 1.1rem;
+    color: #ccc;
+    margin-top: 15px;
+    text-align: center;
+  }
+
+  .cancel-btn {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #e74c3c;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transition: background 0.3s ease;
+    display: block;         /* превращаем кнопку в блочный элемент */
+    margin-left: auto;      /* центрируем */
+    margin-right: auto;
+  }
+
+  .cancel-btn:hover {
+    background-color: #c0392b;
+  }
+
+  @media (max-width: 768px) {
+    .table {
+      height: 70px;
+      font-size: 1rem;
+    }
+  }
+</style>
+
+
+
+<script>
+  const tables = document.querySelectorAll('.table');
+  const info = document.getElementById('selectedTableInfo');
+  const cancelBtn = document.getElementById('cancelTable');
+
+  window.selectedTable = null;
+
+  tables.forEach(table => {
+    table.addEventListener('click', () => {
+      tables.forEach(t => t.classList.remove('selected'));
+      table.classList.add('selected');
+      window.selectedTable = table.getAttribute('data-number');
+      info.textContent = `Вы выбрали столик №${window.selectedTable}`;
+    });
+  });
+
+  cancelBtn.addEventListener('click', () => {
+    tables.forEach(t => t.classList.remove('selected'));
+    window.selectedTable = null;
+    info.textContent = 'Столик не выбран';
+  });
+</script>
+
+<style>
+  @media (max-width: 768px) {
+  body {
+    padding: 20px 15px;
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+
+  .cart-container {
+    padding: 20px;
+    border-radius: 14px;
+  }
+
+  .cart-header i {
+    font-size: 1.5rem;
+  }
+
+  .cart-header span {
+    font-size: 1rem;
+  }
+
+  .cart-item {
+    font-size: 0.95rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .total {
+    font-size: 1.1rem;
+    text-align: left;
+  }
+
+  .btn {
+    width: 100%;
+    font-size: 1rem;
+    padding: 12px;
+    margin-top: 10px;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #table-number {
+    font-size: 1rem;
+    padding: 10px;
+  }
+
+  .back-link {
+    font-size: 1.15rem;
+    margin-top: 30px;
+  }
+
+  .table-map {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .table {
+    height: 60px;
+    font-size: 1rem;
+  }
+
+  #selectedTableInfo {
+    font-size: 1rem;
+  }
+
+  .cancel-btn {
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+}
+
+</style>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+  const selectedPromos = JSON.parse(localStorage.getItem("selectedPromos")) || [];
+  const cartContainer = document.getElementById("cart-items");
+  const promoList = document.getElementById("promoList");
+  const totalElement = document.getElementById("total-price");
+
+  const hotFoodKeywords = ["Стейк", "Ребро", "Куриное", "Бефстроганов", "Утиное", "Картофель", "Дорадо", "Ризотто"];
+  const isHotDish = (name) => hotFoodKeywords.some(word => name.toLowerCase().includes(word.toLowerCase()));
+
+  const today = new Date();
+  const isThursday = today.getDay() === 4;
+
+  let total = 0;
+  let discountFromPromos = 0;
+  let hotDishDiscount = 0;
+
+  if (cartItems.length === 0) {
+    cartContainer.innerHTML = '<p class="empty">Корзина пуста</p>';
+    totalElement.style.display = "none";
+    return;
+  }
+
+  cartItems.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "cart-item";
+    div.innerHTML = `
+  <span><strong>${item.name}</strong> × ${item.qty}</span>
+  <span>${item.price * item.qty} ₸</span>
+`;
+
+    cartContainer.appendChild(div);
+
+    // Горячее блюдо — применим скидку 20% если четверг и выбрана "steak"
+    if (selectedPromos.includes("steak") && isThursday && isHotDish(item.name)) {
+      const discounted = item.price * 0.8;
+      total += discounted;
+      hotDishDiscount += item.price - discounted;
+    } else {
+      total += item.price * item.qty;
+
+    }
+  });
+
+  // Показ акций
+  promoList.innerHTML = '';
+  selectedPromos.forEach(promo => {
+    const li = document.createElement("li");
+    li.style.color = "#f2c94c";
+
+    if (promo === "birthday") {
+      li.textContent = "🎉 День Рождения (-15%)";
+      discountFromPromos += 15;
+    } else if (promo === "lunch") {
+      li.textContent = "🍽️ Скидка -20%";
+      discountFromPromos += 20;
+    } else if (promo === "steak") {
+      li.textContent = "🥩 Идеальный четверг (-20% на горячие блюда)";
+    } else if (promo === "cocktail") {
+      li.textContent = "🍸 Коктейльная среда";
+    } else if (promo === "beer") {
+      li.textContent = "🍺 -20% на пиво";
+    } else {
+      li.textContent = promo;
+    }
+
+    promoList.appendChild(li);
+  });
+
+  // Применяем общую процентную скидку
+  if (discountFromPromos > 100) discountFromPromos = 100;
+  const finalTotal = Math.round(total * (1 - discountFromPromos / 100));
+
+  totalElement.innerHTML = `<strong>Итого: ₸ ${finalTotal}</strong>`;
+});
+</script>
+
+
+<script>
+  function clearCart() {
+    localStorage.removeItem("cart");
+    localStorage.removeItem("selectedPromos");
+    alert("Корзина очищена!");
+    location.reload();
+  }
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+  const firebaseConfig2 = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID",
+    databaseURL: "YOUR_DATABASE_URL"
+  };
+
+  const app2 = initializeApp(firebaseConfig2);
+  const db2 = getDatabase(app2);
+
+  const seatRef = ref(db2, "occupiedSeats");
+
+  onValue(seatRef, snapshot => {
+    const data = snapshot.val();
+    const now = Date.now();
+
+    document.querySelectorAll('.table').forEach(el => {
+      const num = el.getAttribute('data-number');
+      const seat = data?.[num];
+
+      if (seat && seat.occupied) {
+        const reservedTime = seat.reservedAt || 0;
+        const isExpired = now - reservedTime > 4 * 60 * 60 * 1000; // 5 часов
+
+        if (isExpired) {
+          remove(ref(db2, `occupiedSeats/${num}`));
+        } else {
+          el.classList.add("disabled");
+          el.style.background = "#555";
+          el.style.cursor = "not-allowed";
+          el.innerHTML = `❌ ${num}`;
+          el.onclick = null; // блокировка нажатия
+        }
+      }
+    });
+  });
+</script>
+
+<a class="back-link" href="index.html">Назад к меню</a>
+
+<style>
+  .back-link{
+    margin-bottom: 50px
+  }
+  </style>
+
+<style>
+.payment-method {
+  margin-top: 25px;
+  background: #2c2c2c;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+}
+
+.payment-method h3 {
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+  color: #f2c94c;
+  text-align: left;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  background: #1e1e1e;
+  padding: 10px 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: 0.3s ease;
+}
+
+.payment-option:hover {
+  border-color: #f2c94c;
+  box-shadow: 0 0 8px #f2c94c55;
+}
+
+.payment-option input[type="radio"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #f2c94c;
+  border-radius: 50%;
+  margin-right: 10px;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+}
+
+.payment-option input[type="radio"]:checked {
+  background-color: #f2c94c;
+}
+
+.payment-option label {
+  font-size: 1rem;
+  color: #fff;
+  cursor: pointer;
+  flex: 1;
+}
+
+.payment-option i {
+  font-size: 1.4rem;
+  color: #f2c94c;
+  margin-left: 8px;
+}
+</style>
+  
+
+
+<script>
+document.querySelectorAll('.payment-option').forEach(option => {
+  option.addEventListener('click', () => {
+    document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
+    option.classList.add('selected');
+    option.querySelector('input').checked = true;
+  });
+});
+</script>
+
+
+
+
+
+
+
+</body>
+</html>

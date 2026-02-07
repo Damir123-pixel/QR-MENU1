@@ -1,0 +1,333 @@
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  color: #fff;
+  background: #1e1e1e;
+}
+
+.pizza-section {
+  min-height: 100vh; 
+  padding: 60px 20px;
+  text-align: center;
+  background-image: linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url("freshly-baked-pizza-on-rustic-wooden-table-generated-by-ai-free-photo.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+.lemonade-section {
+   min-height: 100vh;
+  padding: 60px 20px;
+  text-align: center;
+  background-image: linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url("oh35zrqn0zp83ripr887kw7zsearyw20.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; 
+}
+.HotFood-section{
+    min-height: 100vh; 
+  padding: 60px 20px;
+  text-align: center;
+  background-image: linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url("95f802fa2e943f8f92d6ec187eba4c16.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+.salat-section{
+    min-height: 100vh;
+  padding: 60px 20px;
+  text-align: center;
+  background-image: linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url("letnii-salat-listia-.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+.pizza-section {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top;
+}
+
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+
+.pizza-title {
+  font-size: 3rem;
+  color: #f2c94c;
+  margin-bottom: 10px;
+}
+
+.pizza-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.pizza-card {
+  background: #2c2c2c;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+  transition: transform 0.3s ease;
+}
+
+.pizza-card:hover {
+  transform: translateY(-8px);
+}
+
+.pizza-card img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+
+.pizza-card h3 {
+  margin-bottom: 10px;
+  font-size: 1.4rem;
+  color: #f2c94c;
+}
+
+.pizza-card p {
+  font-size: 1.1rem;
+  color: #fff;
+}
+.add-to-cart-btn {
+  background: linear-gradient(135deg, #ca5308, #ffcc33);
+  color: #1e1e1e;
+  padding: 14px 26px;
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease;
+}
+
+.add-to-cart-btn:hover {
+  background: linear-gradient(135deg, #ffe97c, #ffd633);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+}
+
+
+.back-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: #2c2c2c;
+  padding: 10px 14px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #f2c94c;
+  font-size: 30px;
+  font-weight: bold;
+  z-index: 9999;
+  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.back-btn:hover {
+  background-color: #3a3a3a;
+  color: #fff;
+}
+
+
+.back-btn:hover {
+  background-color: #3a3a3a;
+  color: #fff;
+}
+@media (max-width: 768px) {
+  .menu-section {
+    padding: 100px 20px;
+  }
+
+  .menu-box {
+    width: 100%;
+    max-width: 90%;
+    margin: 15px auto;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .navbar .menu-links {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+.cart-notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background-color: #28a745;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transition: all 0.4s ease;
+}
+
+.cart-notification.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+
+
+/* 📱 На мобильных — центр снизу */
+@media (max-width: 768px) {
+  .cart-notification {
+    left: 50%;
+    right: auto;
+    transform: translate(-50%, 20px);
+    max-width: 90%;
+    font-size: 0.95rem;
+    text-align: center;
+  }
+
+  .cart-notification.show {
+    transform: translate(-50%, 0);
+  }
+}
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+
+  .pizza-title {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+  }
+
+  .pizza-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 0 10px;
+  }
+
+  .pizza-card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .pizza-card img {
+    height: 280px;
+  }
+
+  .pizza-card h3 {
+    font-size: 1.1rem;
+  }
+
+  .pizza-card p {
+    font-size: 0.95rem;
+  }
+
+  .add-to-cart-btn {
+    font-size: 0.9rem;
+    padding: 10px 16px;
+  }
+
+  .back-btn {
+    font-size: 20px;
+    padding: 6px 10px;
+  }
+
+  .pizza-section,
+  .lemonade-section,
+  .HotFood-section,
+  .salat-section {
+    padding: 40px 10px;
+  }
+
+  .cart-notification {
+    font-size: 0.85rem;
+    padding: 10px 14px;
+  }
+}
+
+.horizontal-card {
+    display: flex;
+    background: #2c2c2c;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    margin-bottom: 3px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .horizontal-card img {
+    width: 60%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .pizza-card-content {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .pizza-card-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #f2c94c;
+  }
+
+  .price-and-cart {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+
+  .price {
+    font-size: 1.2rem;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #1e1e1e;
+    padding: 6px 12px;
+    border-radius: 8px;
+  }
+
+  .qty-btn {
+    background: none;
+    border: none;
+    color: #f2c94c;
+    font-size: 1.2rem;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .qty-number {
+    font-size: 1rem;
+    color: #fff;
+  }
+

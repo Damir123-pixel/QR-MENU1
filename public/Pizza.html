@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Пицца</title>
+  <!-- Запрет кэша, чтобы «Назад» не показывал старую страницу -->
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+
+<script src="session-check.js"></script>
+<noscript>
+  <!-- На всякий — без JS сайт недоступен -->
+  <meta http-equiv="refresh" content="0;url=/index.html">
+</noscript>
+
+  <link rel="stylesheet" href="pizza-style.css">
+  <link rel="shortcut icon" type="image/png" href="icon.png.png">
+</head>
+<body>
+
+    <a href="index.html" class="back-btn">
+  <i class='bx bx-x'></i> Назад
+</a>
+
+  <section class="pizza-section">
+  <h1 class="pizza-title">Меню пиццы</h1>
+    <div class="pizza-grid">
+
+    <div class="horizontal-card">
+      <img src="185ec28c-6b85-5351-a5d0-ca876fe6756e.webp" alt="Маргарита">
+      <div class="pizza-card-content">
+        <h3>Маргарита</h3>
+        <div class="price-and-cart">
+          <span class="price">2200 ₸</span>
+          <div class="quantity-controls">
+            <button class="qty-btn" onclick="changeQty(this, -1)">−</button>
+            <span class="qty-number">1</span>
+            <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+          </div>
+          <button class="add-to-cart-btn" onclick="addToCartWithQty(this, 'Маргарита', 2200)">🛒 В корзину</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="horizontal-card">
+      <img src="maxresdefault.jpg" alt="Пепперони">
+      <div class="pizza-card-content">
+        <h3>Пепперони</h3>
+        <div class="price-and-cart">
+          <span class="price">2500 ₸</span>
+          <div class="quantity-controls">
+            <button class="qty-btn" onclick="changeQty(this, -1)">−</button>
+            <span class="qty-number">1</span>
+            <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+          </div>
+          <button class="add-to-cart-btn" onclick="addToCartWithQty(this, 'Пепперони', 2500)">🛒 В корзину</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="horizontal-card">
+      <img src="XXL.jpg" alt="Четыре сыра">
+      <div class="pizza-card-content">
+        <h3>Четыре сыра</h3>
+        <div class="price-and-cart">
+          <span class="price">2700 ₸</span>
+          <div class="quantity-controls">
+            <button class="qty-btn" onclick="changeQty(this, -1)">−</button>
+            <span class="qty-number">1</span>
+            <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+          </div>
+          <button class="add-to-cart-btn" onclick="addToCartWithQty(this, 'Четыре сыра', 2700)">🛒 В корзину</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="horizontal-card">
+      <img src="550ce4a3740bdaff5da46747348ec6af.jpg" alt="Гавайская">
+      <div class="pizza-card-content">
+        <h3>Гавайская</h3>
+        <div class="price-and-cart">
+          <span class="price">2400 ₸</span>
+          <div class="quantity-controls">
+            <button class="qty-btn" onclick="changeQty(this, -1)">−</button>
+            <span class="qty-number">1</span>
+            <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+          </div>
+          <button class="add-to-cart-btn" onclick="addToCartWithQty(this, 'Гавайская', 2400)">🛒 В корзину</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="horizontal-card">
+      <img src="7257d45c9e04b498ce7d3e690179ca1f.jpg" alt="Мексиканская">
+      <div class="pizza-card-content">
+        <h3>Мексиканская</h3>
+        <div class="price-and-cart">
+          <span class="price">2600 ₸</span>
+          <div class="quantity-controls">
+            <button class="qty-btn" onclick="changeQty(this, -1)">−</button>
+            <span class="qty-number">1</span>
+            <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+          </div>
+          <button class="add-to-cart-btn" onclick="addToCartWithQty(this, 'Мексиканская', 2600)">🛒 В корзину</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="horizontal-card">
+      <img src="XXL_height.jpg" alt="Куриная BBQ">
+      <div class="pizza-card-content">
+        <h3>Куриная BBQ</h3>
+        <div class="price-and-cart">
+          <span class="price">2800 ₸</span>
+          <div class="quantity-controls">
+            <button class="qty-btn" onclick="changeQty(this, -1)">−</button>
+            <span class="qty-number">1</span>
+            <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+          </div>
+          <button class="add-to-cart-btn" onclick="addToCartWithQty(this, 'Куриная BBQ', 2800)">🛒 В корзину</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="horizontal-card">
+      <img src="3LwULlDhqaM.jpg" alt="Овощная">
+      <div class="pizza-card-content">
+        <h3>Овощная</h3>
+        <div class="price-and-cart">
+          <span class="price">2300 ₸</span>
+          <div class="quantity-controls">
+            <button class="qty-btn" onclick="changeQty(this, -1)">−</button>
+            <span class="qty-number">1</span>
+            <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+          </div>
+          <button class="add-to-cart-btn" onclick="addToCartWithQty(this, 'Овощная', 2300)">🛒 В корзину</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="horizontal-card">
+      <img src="f686afd37ac1238dfad4f7f0f15d0ce8.jpg" alt="Грибная">
+      <div class="pizza-card-content">
+        <h3>Грибная</h3>
+        <div class="price-and-cart">
+          <span class="price">2250 ₸</span>
+          <div class="quantity-controls">
+            <button class="qty-btn" onclick="changeQty(this, -1)">−</button>
+            <span class="qty-number">1</span>
+            <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+          </div>
+          <button class="add-to-cart-btn" onclick="addToCartWithQty(this, 'Грибная', 2250)">🛒 В корзину</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="horizontal-card">
+      <img src="scale_1200.jpg" alt="Острая Дьявола">
+      <div class="pizza-card-content">
+        <h3>Острая Дьявола</h3>
+        <div class="price-and-cart">
+          <span class="price">2900 ₸</span>
+          <div class="quantity-controls">
+            <button class="qty-btn" onclick="changeQty(this, -1)">−</button>
+            <span class="qty-number">1</span>
+            <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+          </div>
+          <button class="add-to-cart-btn" onclick="addToCartWithQty(this, 'Острая Дьявола', 2900)">🛒 В корзину</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+</section>
+
+<script src="script.js"></script>
+<div class="cart-notification" id="cartNotification">✅ Добавлено в корзину</div>
+
+<script>
+  function addToCartAndGo(name, price) {
+    
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart.push({ name, price });
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    // показать сообщение
+    showNotification();
+  }
+
+  function showNotification() {
+    const notification = document.getElementById("cartNotification");
+    notification.classList.add("show");
+
+    setTimeout(() => {
+      notification.classList.remove("show");
+    }, 2000); // скрыть через 2 секунды
+  }
+</script>
+
+<style>
+  @media screen and (max-width: 768px) {
+    
+    .pizza-card img {
+      height: 200px; /* Уменьшаем высоту изображений на мобильных */
+    }
+    
+  }
+</style>
+
+
+
+<style>
+  @media (max-width: 768px) {
+    .horizontal-card {
+    display: flex;
+    background: #2c2c2c;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    margin-bottom: 3px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .horizontal-card img {
+    width: 55%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .pizza-card-content {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .pizza-card-content h3 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: #f2c94c;
+  }
+
+  .price-and-cart {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+  }
+
+  .price {
+    font-size: 1.1rem;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #1e1e1e;
+    padding: 6px 12px;
+    border-radius: 8px;
+  }
+
+  .qty-btn {
+    background: none;
+    border: none;
+    color: #f2c94c;
+    font-size: 1.1rem;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .qty-number {
+    font-size: 1rem;
+    color: #fff;
+  }
+  }
+</style>
+
+<script>
+  let qty = 1;
+
+function changeQty(delta) {
+  qty = Math.max(1, qty + delta); // не меньше 1
+  document.getElementById("qtyValue").textContent = qty;
+}
+
+function addToCartWithQty(btn) {
+  const card = btn.closest(".pizza-card, .horizontal-card");
+  const name = card.querySelector("h3").textContent;
+  const priceText = card.querySelector(".price, p").textContent;
+  const price = parseInt(priceText); // извлекаем цену
+
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart.push({ name, price, qty });
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  showNotification();
+}
+
+</script>
+
+
+
+<script>
+  function changeQty(btn, delta) {
+    const qtySpan = btn.parentElement.querySelector('.qty-number');
+    let qty = parseInt(qtySpan.textContent);
+    qty = Math.max(1, qty + delta);
+    qtySpan.textContent = qty;
+  }
+
+  function addToCartWithQty(btn, name, price) {
+  const qty = parseInt(btn.parentElement.querySelector('.qty-number').textContent);
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  // Проверка: есть ли уже такой товар
+  const existingItem = cart.find(item => item.name === name);
+
+  if (existingItem) {
+    existingItem.qty += qty;
+  } else {
+    cart.push({ name, price, qty });
+  }
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+  showNotification();
+}
+
+
+  function showNotification() {
+    const notification = document.getElementById("cartNotification");
+    notification.classList.add("show");
+    setTimeout(() => {
+      notification.classList.remove("show");
+    }, 2000);
+  }
+</script>
+
+<a href="cart.html" class="cart-floating-btn">
+  🛒 Корзина
+  
+</a>
+
+<style>
+.cart-floating-btn {
+  position: fixed;
+  bottom: 20px;   /* 👈 ВНИЗУ */
+  right: 20px;    /* 👈 СПРАВА */
+  background-color: #c9480c;
+  color: #000;
+  padding: 10px 18px;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 12px;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 1000;
+  transition: background 0.2s ease;
+}
+
+.cart-floating-btn:hover {
+  background-color: #d6da0f;
+}
+
+#cart-count {
+  background: rgb(77, 45, 45);
+  color: white;
+  border-radius: 50%;
+  padding: 2px 8px;
+  margin-left: 8px;
+  font-size: 14px;
+}
+
+
+</style>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+  document.getElementById("cart-count").textContent = totalQty;
+});
+</script>
+
+
+
+
+</body>
+</html>

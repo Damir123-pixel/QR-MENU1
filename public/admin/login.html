@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Вход в админку</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #2e1a16, #4d2c20);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #333;
+    }
+
+    .box {
+      background: #fff;
+      padding: 2.5rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      width: 320px;
+      text-align: center;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    .box h2 {
+      margin-bottom: 20px;
+      font-size: 26px;
+      color: #4e2e28;
+    }
+
+    input {
+      width: 100%;
+      margin-top: 12px;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      transition: 0.2s ease;
+    }
+
+    input:focus {
+      border-color: #f2c94c;
+      box-shadow: 0 0 0 2px rgba(242, 201, 76, 0.3);
+    }
+
+    button {
+      width: 100%;
+      margin-top: 14px;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      background-color: #f2c94c;
+      color: #1e1e1e;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #ffe58c;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 400px) {
+      .box {
+        width: 90%;
+        padding: 2rem;
+      }
+
+      .box h2 {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>🔐 Вход в админку</h2>
+    <input type="email" id="email" placeholder="Email администратора" />
+    <input type="password" id="password" placeholder="Пароль" />
+    <button onclick="login()">Войти</button>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCClVQXq8Y5lk2mDHznmvojt9JnLUp6yeQ",
+      authDomain: "qr-menu-c4ae0.firebaseapp.com",
+      projectId: "qr-menu-c4ae0",
+      storageBucket: "qr-menu-c4ae0.appspot.com",
+      messagingSenderId: "474351769143",
+      appId: "1:474351769143:web:a9e192499f96dc0e4011b2"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+
+    window.login = function () {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (!email || !password) {
+        alert("Введите email и пароль.");
+        return;
+      }
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          window.location.href = "index.html"; // <-- откроется админка
+        })
+        .catch(err => {
+          alert("Ошибка входа: " + err.message);
+        });
+    };
+  </script>
+</body>
+</html>
